@@ -1,0 +1,8 @@
+frontend:
+  command: gulp
+  image: monostream/nodejs-gulp-bower
+  volumes:
+    - ./frontend/:/workspace
+  ports:
+    - "8080:8080"
+    - "35729:35729"
