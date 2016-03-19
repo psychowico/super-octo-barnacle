@@ -6,6 +6,7 @@ const babel      = require('gulp-babel');
 const serve      = require('gulp-serve');
 const watch      = require('gulp-watch');
 const batch      = require('gulp-batch');
+const plumber    = require('gulp-plumber');
 
 gulp.task('default', ['watch', 'serve']);
 
@@ -18,6 +19,7 @@ gulp.task('watch', function () {
 
 gulp.task('babel', ()=> {
   return gulp.src('./src/**/*.js')
+    .pipe(plumber())
     .pipe(babel({
       presets: ['es2015']
     }))
