@@ -12,13 +12,13 @@ gulp.task('default', ['watch', 'serve']);
 
 gulp.task('watch', function () {
     livereload.listen();
-    watch('./src/**/*.js', batch(function (events, done) {
+    watch(['./src/**/*.js', './src/**/*.jsx'], batch(function (events, done) {
         gulp.start('webpack', done);
     }));
 });
 
 gulp.task('babel', ()=> {
-  return gulp.src('./src/**/*.js')
+  return gulp.src(['./src/**/*.js', './src/**/*.jsx'])
     .pipe(plumber())
     .pipe(babel({
       presets: ['es2015']
