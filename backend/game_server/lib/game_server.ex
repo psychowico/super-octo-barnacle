@@ -9,11 +9,16 @@ defmodule GameServer do
     children = [
       # Define workers and child supervisors to be supervised
       # worker(GameServer.Worker, [arg1, arg2, arg3]),
+      worker(Entity, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: GameServer.Supervisor]
+    opts = [strategy: :simple_one_for_one, name: GameServer.Supervisor]
     Supervisor.start_link(children, opts)
+  end
+
+  def spawn_cell do
+    Supervisor.start_child(GameServer.Supervisor, [Cell.born])
   end
 end

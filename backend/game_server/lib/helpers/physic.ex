@@ -1,9 +1,10 @@
 defmodule Helpers.Physic do
-	alias Helpers
+	import Helpers.Vector
+	alias  Helpers.Vector, as: Vector
 
-	def move(%Vector{} = position, %Vector{} = velocity, time){
+	def move(%Vector{} = position, %Vector{} = velocity, time) do
 		position |> sum( velocity |> scale( time ) )
-	}
+	end
 
 	def move(%{position: position, velocity: velocity}, time) do 
 		move(position ,velocity ,time)

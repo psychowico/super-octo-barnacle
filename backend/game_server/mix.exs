@@ -7,7 +7,9 @@ defmodule GameServer.Mixfile do
      elixir: "~> 1.3-dev",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps]
+     deps: deps,
+
+    ]
   end
 
   # Configuration for the OTP application
@@ -15,7 +17,7 @@ defmodule GameServer.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     [applications: [:logger],
-     mod: {GameServer, []}]
+     mod: {GameServer, []}  ]
   end
 
   # Dependencies can be Hex packages:
