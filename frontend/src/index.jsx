@@ -1,12 +1,24 @@
 import Cycle from '@cycle/core';
+import './rx/extensions';
 import {makeDOMDriver, hJSX} from '@cycle/dom';
 import SocketIODriver from './drivers/socket.io.js';
 
-function main({SocketIO, DOM}) {
-    const incomingMessages$ = SocketIO.get('init');
-    incomingMessages$.subscribe(() => console.log('test'));
+function main({socketIO, DOM, log}) {
+    const checkboxChanged$  = DOM.select('input').events('click');
+    const incomingMessages$ = socketIO.get('init');
+
+    const outgoingMessages$ = checkboxChanged$
+        .map(ev => {
+            return {
+                messageType: 'user-click',
+                message: {},
+            };
+        })
+        .log();
+
+    // incomingMessages$.subscribe(() => console.log('init...'));
     return {
-        DOM: DOM.select('input').events('click')
+        DOM: checkboxChanged$
             .map(ev => ev.target.checked)
             .startWith(false)
             .map(toggled =>
@@ -14,13 +26,14 @@ function main({SocketIO, DOM}) {
                     <label><input type="checkbox" /> Click me</label>
                     <p>{toggled ? 'ON' : 'off'}</p>
                 </div>
-            )
+            ),
+        socketIO: outgoingMessages$,
     };
 }
 
 const drivers = {
   DOM: makeDOMDriver('#app'),
-  SocketIO: SocketIODriver.createSocketIODriver('localhost:3000'),
+  socketIO: SocketIODriver.createSocketIODriver('localhost:3000'),
 };
 
 Cycle.run(main, drivers);
