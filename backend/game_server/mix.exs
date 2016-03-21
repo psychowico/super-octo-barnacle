@@ -1,8 +1,8 @@
-defmodule GameServer.Mixfile do
+defmodule BernacleServer.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :game_server,
+    [app: :bernacle_server,
      version: "0.0.1",
      elixir: "~> 1.3-dev",
      build_embedded: Mix.env == :prod,
@@ -17,7 +17,7 @@ defmodule GameServer.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     [applications: [:logger],
-     mod: {GameServer, []}  ]
+     mod: {BernacleServer, []}  ]
   end
 
   # Dependencies can be Hex packages:

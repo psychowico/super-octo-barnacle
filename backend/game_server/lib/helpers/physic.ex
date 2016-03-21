@@ -1,12 +1,12 @@
-defmodule Helpers.Physic do
-	import Helpers.Vector
-	alias  Helpers.Vector, as: Vector
+defmodule BernacleServer.Helpers.Physic do
+	alias  BernacleServer.Helpers.Vector
 
-	def move(%Vector{} = position, %Vector{} = velocity, time) do
-		position |> sum( velocity |> scale( time ) )
+	def move(position = %Vector{}, velocity = %Vector{}, time) do
+		position |> Vector.sum( velocity |> Vector.scale( time ))
 	end
 
 	def move(%{position: position, velocity: velocity}, time) do 
-		move(position ,velocity ,time)
+		move(position, velocity, time)
 	end
+	
 end

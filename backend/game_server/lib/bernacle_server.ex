@@ -1,5 +1,6 @@
-defmodule GameServer do
+defmodule BernacleServer do
   use Application
+  alias BernacleServer.ServerSupervisor
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications

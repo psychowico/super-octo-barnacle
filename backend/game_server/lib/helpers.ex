@@ -1,2 +1,2 @@
-defmodule Helpers do
+defmodule BernacleServer.Helpers do
 end
