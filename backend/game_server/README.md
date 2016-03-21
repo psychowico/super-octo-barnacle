@@ -1,24 +1,4 @@
-# GameServer
+# BrancleServer
 
-**TODO: Add description**
-
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
-
-  1. Add `game_server` to your list of dependencies in `mix.exs`:
-
-    ```elixir
-    def deps do
-      [{:game_server, "~> 0.0.1"}]
-    end
-    ```
-
-  2. Ensure `game_server` is started before your application:
-
-    ```elixir
-    def application do
-      [applications: [:game_server]]
-    end
-    ```
-
+to spawn cell -> BernacleServer.CellSupervisor.spawn_cell 
+current spawneed cells -> BernacleServer.CellSupervisor.give_children
