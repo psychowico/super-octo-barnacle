@@ -1,7 +1,9 @@
 import Cycle from '@cycle/core';
 import './rx/extensions';
-import {makeDOMDriver, hJSX} from '@cycle/dom';
+import Rx from 'rx';
+import {makeDOMDriver, h, svg} from '@cycle/dom';
 import SocketIODriver from './drivers/socket.io.js';
+import {Cell} from './components/cell';
 
 function main({DOM, socketIO}) {
     const actions = intent(DOM, socketIO);
@@ -18,7 +20,7 @@ function main({DOM, socketIO}) {
 
 function intent(DOM, socketIO) {
     return {
-        checkboxChanged$: DOM.select('input').events('click'),
+        checkboxChanged$: DOM.select('circle').events('click'),
         initMessage$:     socketIO.get('init'),
     };
 }
@@ -27,7 +29,8 @@ function model(actions) {
     return {
         DOM: actions.checkboxChanged$
             .map(ev => ev.target.checked)
-            .startWith(false),
+            .startWith(false)
+            .scan((acc, val) => !acc),
         socketIO: actions.checkboxChanged$
             .map(ev => {
                 return {
@@ -39,11 +42,16 @@ function model(actions) {
 }
 
 function view($state) {
-    return $state.map(toggled =>
-            <div>
-                <label><input type="checkbox" /> Click me</label>
-                <p>{toggled ? 'ON' : 'off'}</p>
-            </div>
+    const props$ = Rx.Observable.interval(500).map(() => ({
+        radius: Math.random() * 100, position: {x: 100, y: 100}
+    }));
+    const cell = Cell({
+        props$: props$
+    });
+    return cell.DOM.map((cell) =>
+        svg('svg', {width: 500, height: 500}, [
+            cell
+        ])
     );
 }
 

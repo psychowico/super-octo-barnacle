@@ -12,7 +12,8 @@ gulp.task('default', ['watch', 'serve']);
 
 gulp.task('watch', function () {
     livereload.listen();
-    watch(['./src/**/*.js', './src/**/*.jsx'], batch(function (events, done) {
+    const files = ['./src/**/*.js', './src/**/*.jsx', './src/index.html'];
+    watch(files, batch(function (events, done) {
         gulp.start('webpack', done);
     }));
 });
