@@ -1,6 +1,6 @@
 defmodule BernacleServer do
   use Application
-  alias BernacleServer.ServerSupervisor
+  alias BernacleServer.Supervisors.ServerSupervisor
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications

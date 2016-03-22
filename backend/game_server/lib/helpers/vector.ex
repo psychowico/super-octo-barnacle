@@ -8,16 +8,16 @@ defmodule BernacleServer.Helpers.Vector do
 
 	defstruct x: 0.0, y: 0.0
 
-	def distance(d1 = %Vector{}, d2 = %Vector{}) do 
-		Math.sqrt(Math.pow(d1.x - d2.x, 2) + Math.pow(d1.y - d2.y, 2))
+	def distance(v1 = %Vector{}, v2 = %Vector{}) do 
+		Math.sqrt(Math.pow(v1.x - v2.x, 2) + Math.pow(v1.y - v2.y, 2))
 	end
 	
-	def sum(d1 = %Vector{}, d2 = %Vector{}) do
-		%Vector{x: d1.x+d2.x, y: d1.y+d2.y}
+	def sum(v1 = %Vector{}, v2 = %Vector{}) do
+		%Vector{x: v1.x+v2.x, y: v1.y+v2.y}
 	end
 
-	def scale(d1 = %Vector{}, alpha) do
-		%Vector{x: d1.x*alpha, y: d1.y*alpha}
+	def scale(v1 = %Vector{}, alpha) do
+		%Vector{x: v1.x*alpha, y: v1.y*alpha}
 	end
 
 	def module(d = %Vector{}) do
@@ -26,7 +26,7 @@ defmodule BernacleServer.Helpers.Vector do
 
 	# ------- poli ------ #
 
-	def scale(alpha, d1 = %Vector{}), do: scale(d1, alpha)
+	def scale(alpha, v1 = %Vector{}), do: scale(v1, alpha)
 
 	# ------- errors ------ #
 
