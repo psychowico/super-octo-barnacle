@@ -34,11 +34,14 @@ function createSocketIODriver(url) {
 // just for test purposes
 function createFakeSocketIODriver(url) {
 
-    function get(eventName) {
+    const debugEventsObservers = new Map();
+
+    function get(messageType) {
         return Rx.Observable.create(observer => {
-            if (eventName === 'init') {
-                observer.onNext();
-            }
+            var debug = debugEventsObservers.get(messageType) || {};
+            debug.observer = observer;
+            debugEventsObservers.set(messageType, debug);
+            flushDebugMessages();
         });
     }
 
@@ -46,10 +49,33 @@ function createFakeSocketIODriver(url) {
         console.info(`tried to send ${messageType} event`);
     }
 
+    function simulateIncomingEvent(messageType, message) {
+        var debug = debugEventsObservers.get(messageType) || {};
+        debug.messages = debug.messages || [];
+        debug.messages.push({messageType, message});
+        debugEventsObservers.set(messageType, debug);
+        flushDebugMessages();
+    }
+
+    function flushDebugMessages() {
+        Rx.Observable.from(debugEventsObservers.values())
+            .filter((debug) => debug.observer)
+            .flatMap((debug) => {
+                const messages = debug.messages;
+                debug.messages = [];
+                return Rx.Observable.combineLatest(
+                    Rx.Observable.of(debug.observer),
+                    Rx.Observable.from(messages)
+                )
+            })
+            .subscribe(([observer, event]) => observer.onNext(event.message));
+    }
+
     return function socketIODriver(events$) {
         events$.subscribe(event => publish(event.messageType, event.message));
         return {
             get,
+            simulateIncomingEvent: simulateIncomingEvent
         }
     };
 }

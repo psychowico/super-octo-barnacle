@@ -10,49 +10,55 @@ function main({DOM, socketIO}) {
 
     var $state = model(actions);
 
-    // actions.initMessage$.subscribe(() => console.log('init...'));
+    actions.socket.init$.subscribe(() => console.log('init...'));
+
     return {
-        DOM: view($state.DOM),
-        socketIO: $state.socketIO,
+        DOM: view($state)
     };
 }
 
 
 function intent(DOM, socketIO) {
+    const initMessage$ = socketIO.get('init');
+    const spawnMessage$ = socketIO.get('spawn');
+    triggerDebugEvents(socketIO);
+
     return {
-        checkboxChanged$: DOM.select('circle').events('click'),
-        initMessage$:     socketIO.get('init'),
+        socket: {
+            init$: initMessage$,
+            spawn$: spawnMessage$,
+        }
     };
 }
 
 function model(actions) {
+    const cells$ = actions.socket.spawn$.map((props) =>
+        Cell({
+            props$: Rx.Observable.of(props)
+        }).DOM
+    )
+    .flatMap((vdom) => vdom)
+    .scan((arr, cell) => arr.concat(cell), []);
+
     return {
-        DOM: actions.checkboxChanged$
-            .map(ev => ev.target.checked)
-            .startWith(false)
-            .scan((acc, val) => !acc),
-        socketIO: actions.checkboxChanged$
-            .map(ev => {
-                return {
-                    messageType: 'user-click',
-                    message: {},
-                };
-            })
+        cells$: cells$
     };
 }
 
 function view($state) {
-    const props$ = Rx.Observable.interval(500).map(() => ({
-        radius: Math.random() * 100, position: {x: 100, y: 100}
-    }));
-    const cell = Cell({
-        props$: props$
-    });
-    return cell.DOM.map((cell) =>
-        svg('svg', {width: 500, height: 500}, [
-            cell
-        ])
+    return $state.cells$.map((cells) =>
+        svg('svg', {width: 500, height: 500}, cells)
     );
+}
+
+function triggerDebugEvents(socketIO) {
+    socketIO.simulateIncomingEvent('init');
+    const cells = [
+        {position: {x: 40, y: 33}, radius: 20},
+        {position: {x: 400, y: 170}, radius: 100},
+        {position: {x: 95, y: 225}, radius: 66},
+    ]
+    cells.forEach((cell) => socketIO.simulateIncomingEvent('spawn', cell));
 }
 
 const drivers = {
