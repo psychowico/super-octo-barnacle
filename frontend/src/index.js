@@ -6,6 +6,7 @@ import Rx from 'rx';
 import {makeDOMDriver, h, svg} from '@cycle/dom';
 import SocketIODriver from './drivers/socket.io.js';
 import {Cell} from './components/cell';
+import {triggerDebugEvents} from './helpers/debug';
 
 function main({DOM, socketIO}) {
     const actions = intent(DOM, socketIO);
@@ -20,33 +21,31 @@ function main({DOM, socketIO}) {
 }
 
 function intent(DOM, socketIO) {
-    const initMessage$ = socketIO.get('init');
-    const spawnMessage$ = socketIO.get('spawn');
     triggerDebugEvents(socketIO);
-
     return {
         socket: {
-            init$: initMessage$,
-            spawn$: spawnMessage$,
+            init$:  socketIO.get('init'),
+            spawn$: socketIO.get('spawn'),
+            move$:  socketIO.get('move'),
         },
         click$: DOM.select('svg').events('click')
     };
 }
 
 function model(actions) {
-    const clickSpawns$ = actions.click$.map(() => ({
-        position: {
-            x: Math.random() * 800, y: Math.random() * 600
-        },
-        radius: Math.random() * 100
-    }));
-    const cells$ = actions.socket.spawn$.merge(clickSpawns$).map((props) =>
-        Cell({
-            props$: Rx.Observable.of(props)
-        }).DOM
-    )
-    .flatMap((vdom) => vdom)
-    .scan((arr, cell) => arr.concat(cell), []);
+    const cells$ = actions.socket.spawn$
+        .merge(actions.socket.move$)
+        .map((props) =>
+            Cell({
+                props$: Rx.Observable.of(props)
+            }).DOM
+        )
+        .flatMap((vdom) => vdom)
+        .scan((cellsDOM, cellVDom) => {
+            cellsDOM[cellVDom.id] = cellVDom;
+            return cellsDOM;
+        }, {})
+        .map((cells) => Object.keys(cells).sort().map(key => cells[key]));
 
     return {
         cells$: cells$
@@ -55,18 +54,12 @@ function model(actions) {
 
 function view($state) {
     return $state.cells$.map((cells) =>
-        svg('svg', {width: 800, height: 600}, cells)
+        svg(
+            'svg',
+            {width: 800, height: 600},
+            cells
+        )
     );
-}
-
-function triggerDebugEvents(socketIO) {
-    socketIO.simulateIncomingEvent('init');
-    const cells = [
-        {position: {x: 40, y: 33}, radius: 20},
-        {position: {x: 400, y: 170}, radius: 100},
-        {position: {x: 95, y: 225}, radius: 66},
-    ]
-    cells.forEach((cell) => socketIO.simulateIncomingEvent('spawn', cell));
 }
 
 const drivers = {
