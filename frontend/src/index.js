@@ -1,3 +1,5 @@
+require('file?name=[name].[ext]!./index.html');
+
 import Cycle from '@cycle/core';
 import './rx/extensions';
 import Rx from 'rx';
