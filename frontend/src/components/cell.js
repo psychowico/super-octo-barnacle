@@ -3,7 +3,7 @@ import {svg} from '@cycle/dom';
 
 export function Cell(sources) {
     return isolate(CellComponent)(sources);
-};
+}
 
 const MaxRadius = 100;
 

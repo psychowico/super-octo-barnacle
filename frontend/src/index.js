@@ -17,7 +17,6 @@ function main({DOM, socketIO}) {
     };
 }
 
-
 function intent(DOM, socketIO) {
     const initMessage$ = socketIO.get('init');
     const spawnMessage$ = socketIO.get('spawn');
@@ -27,12 +26,19 @@ function intent(DOM, socketIO) {
         socket: {
             init$: initMessage$,
             spawn$: spawnMessage$,
-        }
+        },
+        click$: DOM.select('svg').events('click')
     };
 }
 
 function model(actions) {
-    const cells$ = actions.socket.spawn$.map((props) =>
+    const clickSpawns$ = actions.click$.map(() => ({
+        position: {
+            x: Math.random() * 800, y: Math.random() * 600
+        },
+        radius: Math.random() * 100
+    }));
+    const cells$ = actions.socket.spawn$.merge(clickSpawns$).map((props) =>
         Cell({
             props$: Rx.Observable.of(props)
         }).DOM
@@ -47,7 +53,7 @@ function model(actions) {
 
 function view($state) {
     return $state.cells$.map((cells) =>
-        svg('svg', {width: 500, height: 500}, cells)
+        svg('svg', {width: 800, height: 600}, cells)
     );
 }
 

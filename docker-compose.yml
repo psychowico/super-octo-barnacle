@@ -1,6 +1,6 @@
 frontend:
-  command: gulp
-  image: monostream/nodejs-gulp-bower
+  command: npm run serve
+  build: ./frontend
   volumes:
     - ./frontend/:/workspace
   ports:
