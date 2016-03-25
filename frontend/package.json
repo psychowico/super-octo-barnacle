@@ -15,14 +15,15 @@
     "@cycle/dom": "^7.1.1",
     "@cycle/isolate": "^1.2.0",
     "cycle-socket.io": "github:cgeorg/cycle-socket.io",
+    "lodash": "^4.6.1",
     "rx": "^4.0.6",
     "socket.io-client": "^1.3.7"
   },
   "devDependencies": {
     "babel-core": "^6.7.4",
     "babel-loader": "^6.2.4",
-    "babel-plugin-transform-react-jsx": "^6.6.5",
     "babel-preset-es2015": "^6.6.0",
+    "babel-preset-stage-2": "^6.5.0",
     "file-loader": "^0.8.5",
     "webpack": "^1.12.3",
     "webpack-dev-server": "^1.14.1"

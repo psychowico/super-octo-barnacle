@@ -6,16 +6,16 @@ The build produces a single bundled script in `browser/bundle.js`.
 Usage
 -----
 
-Install gulp:
+Install webpack:
 
-    npm install -g gulp
+    npm install -g webpack webpack-dev-server
 
 Install dependencies:
 
     npm install
 
-Build:
+Run for developing purposes:
 
-    gulp
+    npm run serve
 
 Then open `http://localhost:8080` in your browser.

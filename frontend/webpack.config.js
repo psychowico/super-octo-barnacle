@@ -1,4 +1,4 @@
-const path = require("path");
+const path  = require("path");
 
 module.exports = {
     entry: "./src/index.js",
@@ -13,7 +13,7 @@ module.exports = {
                 exclude: /(node_modules|dist)/,
                 loader: "babel",
                 query: {
-                    presets: ["es2015"]
+                    presets: ["es2015", "stage-2"]
                 }
             }
         ]
