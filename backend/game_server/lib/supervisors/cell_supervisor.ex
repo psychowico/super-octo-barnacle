@@ -5,7 +5,7 @@ defmodule BernacleServer.Supervisors.CellSupervisor do
     @name BernacleCellSupervisor
 
     def start_link do
-        IO.puts "BernacleCellSupervisor stared"
+        IO.puts "BernacleCellSupervisor started"
         Supervisor.start_link(__MODULE__, :ok, name: @name)
     end
 
@@ -20,7 +20,7 @@ defmodule BernacleServer.Supervisors.CellSupervisor do
         Supervisor.start_child(@name, [])
     end
 
-    def give_children do 
+    def give_children do
         for { _ , pid, _, _} <- Supervisor.which_children(@name), do: pid
     end
 

@@ -3,15 +3,9 @@ defmodule BernacleServer.Entity do
 
 	defstruct id: 0, attributes: %{}, abilities: %{}
 
-	def start_link(en = %Entity{}), do: Agent.start_link(fn -> en end) 
+	def start_link(en = %Entity{}), do: Agent.start_link(fn -> en end)
 
-	def new, do: %Entity{}
-
-	def kill(en), do: Agent.stop(en)
-
-	def get_attribute(%Entity{attributes: attr}, key), do: Map.get(attr, key)
-
-	def get_ability(%Entity{abilities: abi}, key), do: Map.get(abi, key)
+	def kill(agent), do: Agent.stop(agent)
 
 	def get_ability(agent, key) do
 		Agent.get(agent, fn entity -> get_ability(entity, key) end)
@@ -21,12 +15,25 @@ defmodule BernacleServer.Entity do
 		Agent.get(agent, fn entity -> entity end)
 	end
 
-	def set_attribute(en = %Entity{attributes: attr}, key, val) do 
+	def do_ability(agent, ability, params) do
+		Agent.update(
+			agent,
+			fn entity -> do_ability(entity, ability, params) end
+		)
+	end
+
+	def new, do: %Entity{}
+
+	def get_attribute(%Entity{attributes: attr}, key), do: Map.get(attr, key)
+
+	def get_ability(%Entity{abilities: abi}, key), do: Map.get(abi, key)
+
+	defp set_attribute(en = %Entity{attributes: attr}, key, val) do
 		Map.put(en, :attributes, Map.put(attr, key, val))
 	end
 
-	def give_ability(en = %Entity{abilities: abi}, ability, resp) do 
-		Map.put(en, :abilities, Map.put(abi, ability, resp)) 
+	defp give_ability(en = %Entity{abilities: abi}, ability, resp) do
+		Map.put(en, :abilities, Map.put(abi, ability, resp))
 	end
 
 	def do_ability(en = %Entity{}, ability, params) do
@@ -36,11 +43,6 @@ defmodule BernacleServer.Entity do
 		end
 	end
 
-	def do_ability(agent, ability, params) do 
-		Agent.update(
-			agent, 
-			fn entity -> do_ability(entity, ability, params) end
-		)
-	end
+
 
 end

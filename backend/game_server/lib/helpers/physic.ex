@@ -5,8 +5,8 @@ defmodule BernacleServer.Helpers.Physic do
 		position |> Vector.sum( velocity |> Vector.scale( time ))
 	end
 
-	def move(%{position: position, velocity: velocity}, time) do 
+	def move(%{position: position, velocity: velocity}, time) do
 		move(position, velocity, time)
 	end
-	
+
 end
