@@ -4,7 +4,7 @@ import Rx from 'rx';
 // WARN: it's only for debug purposes - it's subscribe
 // to stream too, not only logging
 Rx.Observable.prototype.log = function (descriptor = '') {
-    this.subscribe(
+    return this.subscribe(
         (ev)  => console.log(`Log$ ${descriptor}: `, ev),
         (err) => console.error(`Log$ ${descriptor}: `, err)
     );

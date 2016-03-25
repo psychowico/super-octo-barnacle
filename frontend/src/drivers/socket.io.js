@@ -66,7 +66,7 @@ function createFakeSocketIODriver(url) {
                 return Rx.Observable.combineLatest(
                     Rx.Observable.of(debug.observer),
                     Rx.Observable.from(messages)
-                )
+                );
             })
             .subscribe(([observer, event]) => observer.onNext(event.message));
     }
@@ -76,7 +76,7 @@ function createFakeSocketIODriver(url) {
         return {
             get,
             simulateIncomingEvent: simulateIncomingEvent
-        }
+        };
     };
 }
 
