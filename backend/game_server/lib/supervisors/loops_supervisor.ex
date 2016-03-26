@@ -1,7 +1,7 @@
 defmodule BernacleServer.Supervisors.LoopsSupervisor do
     use Supervisor
     alias BernacleServer.Supervisors.{MoveLoopSupervisor, CellSupervisor}
-    alias BernacleServer.Loops.{LoopsStateHolder, LoopMove}
+    alias BernacleServer.Loops.{LoopsStateHolder, MoveLoop}
 
     @name BernacleLoopSupervisor
 
