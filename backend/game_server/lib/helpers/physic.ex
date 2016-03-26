@@ -1,7 +1,7 @@
 defmodule BernacleServer.Helpers.Physic do
 	alias  BernacleServer.Helpers.Vector
 
-    @time_factor = 1
+    @time_factor 1
 
 	def move(position = %Vector{}, velocity = %Vector{}, time) do
         velocity |> Vector.scale(time * @time_factor) |> Vector.sum(position)
