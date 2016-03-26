@@ -1,6 +1,6 @@
 defmodule BernacleServer.Supervisors.CellSupervisor do
     use Supervisor
-    alias BernacleServer.{Entity,Cell}
+    alias BernacleServer.{Entity, Cell}
 
     @name BernacleCellSupervisor
 
@@ -24,8 +24,9 @@ defmodule BernacleServer.Supervisors.CellSupervisor do
         for { _ , pid, _, _} <- Supervisor.which_children(@name), do: pid
     end
 
-    def do_on_child({action, params}) do 
-        for cell <- give_children, do: Entity.do_ability(cell, action, params)
+    def do_on_child(action, params) do
+        children = give_children()
+        for cell <- children, do: spawn(fn -> Entity.do_ability(cell, action, params) end)
     end
 
 

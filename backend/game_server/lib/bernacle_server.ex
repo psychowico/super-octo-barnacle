@@ -8,5 +8,11 @@ defmodule BernacleServer do
     ServerSupervisor.start_link()
   end
 
+  def spawn_cell do
+    for x <- 1..10000 do
+        BernacleServer.Supervisors.CellSupervisor.spawn_cell()
+    end
+    BernacleServer.Supervisors.CellSupervisor.do_on_child(:move, [1])
+  end
 
 end
