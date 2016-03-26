@@ -12,7 +12,7 @@ defmodule BernacleServer.Supervisors.LoopsSupervisor do
 
     def init(:ok) do
         children = [
-            worker(LoopMove, []),
+            worker(MoveLoop, []),
             worker(LoopsStateHolder, [])
         ]
         supervise(children, [strategy: :one_for_one, max_restarts: 200000, max_seconds: 1] )
