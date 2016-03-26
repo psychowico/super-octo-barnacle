@@ -1,4 +1,4 @@
-defmodule BernacleServer.Loops.LoopMove do
+defmodule BernacleServer.Loops.MoveLoop do
 	alias BernacleServer.Supervisors.CellSupervisor
 	alias BernacleServer.Loops.LoopsStateHolder
 
