@@ -1,6 +1,6 @@
-defmodule BernacleServer.ServerSupervisor do
+defmodule BernacleServer.Supervisors.ServerSupervisor do
     use Supervisor
-    alias BernacleServer.CellSupervisor
+    alias BernacleServer.Supervisors.{CellSupervisor, LoopsSupervisor}
 
     @name BernacleServerSupervisor
 
@@ -11,7 +11,8 @@ defmodule BernacleServer.ServerSupervisor do
 
     def init(:ok) do
         children = [
-            supervisor(CellSupervisor, [])
+            supervisor(CellSupervisor, []),
+            supervisor(LoopsSupervisor, [])
         ]
         supervise(children, strategy: :rest_for_one)
     end
