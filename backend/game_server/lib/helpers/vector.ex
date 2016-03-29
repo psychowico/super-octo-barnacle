@@ -35,7 +35,7 @@ defmodule BernacleServer.Helpers.Vector do
 		Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2))
 	end
 
-	def normalize_vector(v = %Vector{}) do
+	def normalize(v = %Vector{}) do
 		scale(v, 1 / module(v))
 	end
 

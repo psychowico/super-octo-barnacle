@@ -14,9 +14,9 @@ defmodule BernacleServer.Helpers.Physic do
     def calc_current_forces(position = %Vector{}, velocity = %Vector{}) do
         velocity_length = Vector.module(velocity)
 
-        Vector.unit_vector(velocity)
+        Vector.normalize(velocity)
             |> Vector.sum(game_vector_field(position))
-            |> Vector.unit_vector
+            |> Vector.normalize
             |> Vector.scale(velocity_length)
     end
 
