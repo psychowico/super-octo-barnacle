@@ -1,7 +1,7 @@
 defmodule WebServer.RoomSupervisor do
     use Supervisor
 
-    @name RoomSupervisor
+    @name WebServer.RoomSupervisor
 
     def start_link do
         IO.puts "RoomSupervisor started"
@@ -16,15 +16,15 @@ defmodule WebServer.RoomSupervisor do
     end
 
     def join_to_room(name, pid) do
-        Room.join_to_room(name, pid)
+        WebServer.Room.join_to_room(name, pid)
     end
 
     def disconnect_from_room(name, pid) do
-        Room.kick_from_room(name, pid)
+        WebServer.Room.kick_from_room(name, pid)
     end
 
     def message_to_room(room_name, subject, message) do
-        Room.message_to_room(room_name, subject, message)
+        WebServer.Room.message_to_room(room_name, subject, message)
     end
 
 end

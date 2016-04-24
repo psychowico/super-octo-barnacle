@@ -21,7 +21,6 @@ defmodule BernacleServer.Cell do
 		velocity = Entity.get_attribute(cell, :velocity)
 		new_velocity = Physic.calc_current_forces(position, velocity)
 		new_position = Physic.move(position, new_velocity, time)
-		# IO.inspect new_position
 		cell
 			|> Entity.set_attribute(:position, new_position)
 			|> Entity.set_attribute(:velocity, new_velocity)
