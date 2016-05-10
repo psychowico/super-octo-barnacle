@@ -13,7 +13,6 @@ defmodule BernacleServer.Loops.LoopsStateHolder do
 
 	def get_loop_time(loop) do
 		Agent.get(@name, fn loop_state ->
-			IO.inspect loop_state
 			Map.get(loop_state, loop)
 		end)
 	end
