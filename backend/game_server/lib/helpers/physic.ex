@@ -2,6 +2,8 @@ defmodule BernacleServer.Helpers.Physic do
 	alias  BernacleServer.Helpers.Vector
 
     @time_factor 1
+	@width 600
+	@width 800
 
 	def move(position = %Vector{}, velocity = %Vector{}, time) do
         velocity |> Vector.scale(time * @time_factor) |> Vector.sum(position)
@@ -11,19 +13,33 @@ defmodule BernacleServer.Helpers.Physic do
 		move(position, velocity, time)
 	end
 
-    def calc_current_forces(position = %Vector{}, velocity = %Vector{}) do
-        velocity_length = Vector.module(velocity)
+	def turn(position = %Vector{}, velocity = %Vector{}, time) do
+		calc_current_velocity(position, velocity)
+	end
 
-        Vector.normalize(velocity)
-            |> Vector.sum(game_vector_field(position))
-            |> Vector.normalize
-            |> Vector.scale(velocity_length)
+	def turn(%{position: position, velocity: velocity}, time) do
+		turn(position, velocity, time)
+	end
+
+	def calc_new_velocity(position = %Vector{}, velocity = %Vector{}) do
+        pos = get_possition_on_board(position, velocity)
+		new_x = case pos.x do
+			1 when velocity.x < 0 -> velocity.x * -1
+			-1 when velocity.x > 0 -> velocity.x * -1
+			_ -> velocity.x
+		end
+
+		new_y = case pos.y do
+			1 when velocity.y < 0 -> velocity.y * -1
+			-1 when velocity.y > 0 -> velocity.y * -1
+			_ -> velocity.y
+		end
+
+		Vector.new(new_x, new_y)
     end
 
-    def game_vector_field(position = %Vector{}) do
-        width = 600
-        height = 800
-        case {position.x < 0, position.y < 0, position.x > width, position.y > height} do
+    def get_possition_on_board(position = %Vector{}, velocity = %Vector{}) do
+        case {position.x < 0, position.y < 0, position.x > @width, position.y > @height} do
             {true, true, false, false} -> Vector.new(1, 1)
             {false, true, true, false} -> Vector.new(-1, 1)
             {false, false, true, true} -> Vector.new(-1, -1)
