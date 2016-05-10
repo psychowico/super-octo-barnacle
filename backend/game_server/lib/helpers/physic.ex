@@ -3,7 +3,7 @@ defmodule BernacleServer.Helpers.Physic do
 
     @time_factor 1
 	@width 600
-	@width 800
+	@height 800
 
 	def move(position = %Vector{}, velocity = %Vector{}, time) do
         velocity |> Vector.scale(time * @time_factor) |> Vector.sum(position)
@@ -14,7 +14,7 @@ defmodule BernacleServer.Helpers.Physic do
 	end
 
 	def turn(position = %Vector{}, velocity = %Vector{}, time) do
-		calc_current_velocity(position, velocity)
+		calc_new_velocity(position, velocity)
 	end
 
 	def turn(%{position: position, velocity: velocity}, time) do
@@ -23,16 +23,16 @@ defmodule BernacleServer.Helpers.Physic do
 
 	def calc_new_velocity(position = %Vector{}, velocity = %Vector{}) do
         pos = get_possition_on_board(position, velocity)
-		new_x = case pos.x do
-			1 when velocity.x < 0 -> velocity.x * -1
-			-1 when velocity.x > 0 -> velocity.x * -1
-			_ -> velocity.x
+		new_x = case {pos.x, velocity.x} do
+			{1, x} when x < 0 -> x * -1
+			{-1, x} when x > 0 -> x * -1
+			{_, x} -> x
 		end
 
-		new_y = case pos.y do
-			1 when velocity.y < 0 -> velocity.y * -1
-			-1 when velocity.y > 0 -> velocity.y * -1
-			_ -> velocity.y
+		new_y = case {pos.y, velocity.y} do
+			{1, y} when y < 0 -> y * -1
+			{-1, y} when y > 0 -> y * -1
+			{_, y} -> y
 		end
 
 		Vector.new(new_x, new_y)

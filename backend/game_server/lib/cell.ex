@@ -19,15 +19,11 @@ defmodule BernacleServer.Cell do
 	def move(cell = %Entity{}, time) do
 		position = Entity.get_attribute(cell, :position)
 		velocity = Entity.get_attribute(cell, :velocity)
+		new_velocity = Physic.turn(position, velocity, time)
 		new_position = Physic.move(position, velocity, time)
-		Entity.set_attribute(cell, :position, new_position)
-	end
-
-	def turn(cell = %Entity{}, time) do
-		position = Entity.get_attribute(cell, :position)
-		velocity = Entity.get_attribute(cell, :velocity)
-		new_velocity = Physic.turn(position, velocity)
+		IO.inspect {new_position, new_velocity}
 		Entity.set_attribute(cell, :velocity, new_velocity)
+		|> Entity.set_attribute( :position, new_position)
 	end
 
 	def eat(cell, mass) do
